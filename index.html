@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Listy - Real Estate Made Simple</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;900&display=swap');
+
+  body {
+    margin: 0; padding: 0;
+    font-family: 'Poppins', sans-serif;
+    background: #f9fdfd;
+    color: #004d4d;
+  }
+
+  /* Nav styles */
+  nav {
+    background: #004d4d;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+  }
+  nav a {
+    color: #a4d4d4;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.3s;
+  }
+  nav a:hover {
+    color: #00b3b3;
+  }
+
+  /* Container */
+  .container {
+    max-width: 900px;
+    margin: 2rem auto 4rem;
+    padding: 0 1rem;
+  }
+
+  /* Sections */
+  section {
+    display: none;
+    position: relative;
+    padding: 2.5rem 2rem;
+    background: #e0f2f2;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 128, 128, 0.15);
+    transition: box-shadow 0.3s ease;
+  }
+  section.active {
+    display: block;
+  }
+  section:hover {
+    box-shadow: 0 10px 20px rgba(0, 128, 128, 0.3);
+  }
+
+  /* Headings */
+  h1, h2 {
+    font-weight: 900;
+    color: #004d4d;
+    letter-spacing: 0.03em;
+    margin-bottom: 0.3rem;
+  }
+  h1 {
+    font-size: 2.8rem;
+  }
+  h2 {
+    font-size: 2rem;
+  }
+  h3 {
+    font-weight: 700;
+    margin-top: 2rem;
+    color: #006666;
+  }
+
+  /* Intro text */
+  .intro-text {
+    color: #008080;
+    font-weight: 700;
+    font-size: 1.25rem;
+    max-width: 600px;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Lists */
+  ul {
+    max-width: 700px;
+    line-height: 1.6;
+    padding-left: 1.25rem;
+  }
+  ul li {
+    padding: 6px 0;
+  }
+
+  /* Buttons */
+  .btn {
+    background-color: #008080;
+    border: none;
+    padding: 12px 24px;
+    color: white;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 1.5rem;
+    display: inline-block;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+  }
+  .btn:hover {
+    background-color: #004d4d;
+  }
+
+  /* Background Shapes */
+  .shape-circle {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.35;
+    z-index: -1;
+  }
+  .shape1 {
+    width: 200px; height: 200px;
+    top: -40px; left: -40px;
+    background: #008080;
+  }
+  .shape2 {
+    width: 250px; height: 250px;
+    bottom: -50px; right: -50px;
+    background: #004d4d;
+  }
+  .shape3 {
+    width: 150px; height: 150px;
+    top: 20px; right: 10px;
+    background: #005050;
+    border-radius: 30% 70% 70% 30% / 60% 40% 60% 40%;
+    filter: blur(40px);
+  }
+  .shape4 {
+    width: 100px; height: 100px;
+    bottom: 30px; left: 10px;
+    background: #007070;
+    border-radius: 40% 60% 60% 40% / 50% 50% 50% 50%;
+    filter: blur(35px);
+  }
+
+  /* FAQ styles */
+  .faq-section dt {
+    font-weight: 700;
+    margin-top: 1rem;
+    cursor: pointer;
+    color: #006666;
+  }
+  .faq-section dd {
+    margin-left: 1rem;
+    font-weight: 500;
+    color: #004d4d;
+    display: none;
+  }
+
+  /* Agent bios */
+  .agent-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    max-width: 700px;
+  }
+  .agent-card {
+    background: white;
+    border-radius: 10px;
+    padding: 1rem;
+    width: 48%;
+    box-shadow: 0 4px 10px rgb(0 77 77 / 0.2);
+    cursor: pointer;
+    transition: box-shadow 0.3s ease;
+  }
+  .agent-card:hover {
+    box-shadow: 0 8px 20px rgb(0 128 128 / 0.4);
+  }
+  .agent-photo {
+    width: 100%;
+    max-height: 180px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 0.7rem;
+  }
+  .agent-name {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #004d4d;
+  }
+  .agent-bio {
+    font-size: 0.9rem;
+    color: #006666;
+  }
+
+  /* Star rating UI */
+  .stars {
+    color: #008080;
+    font-size: 1.2rem;
+    margin-top: 0.5rem;
+  }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .agent-card {
+      width: 100%;
+    }
+    nav {
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" data-target="about">About</a>
+  <a href="#" data-target="buyers">Buyers</a>
+  <a href="#" data-target="sellers">Sellers</a>
+  <a href="#" data-target="vendors">Vendors</a>
+  <a href="#" data-target="agents">Agents</a>
+  <a href="#" data-target="respa">RESPA Compliance</a>
+</nav>
+
+<div class="container">
+
+  <!-- About -->
+  <section id="about" class="active">
+    <h1>Welcome to Listy</h1>
+    <p class="intro-text">
+      A smarter, simpler way to navigate real estate. Choose only the services you need — no surprises, just transparency and control.
+    </p>
+    <div class="shape-circle shape1"></div>
+    <div class="shape-circle shape2"></div>
+
+    <p>
+      Listy empowers buyers and sellers by breaking down real estate services into clear, flat fees. You only pay for what you want — no hidden costs, no confusing percentages.
+    </p>
+    <p>
+      Join the future of home buying and selling with full control, flexibility, and expert support.
+    </p>
+    <a href="https://forms.gle/your-google-form-link" class="btn" target="_blank" rel="noopener noreferrer">Get Started</a>
+
+    <h3>FAQ - General</h3>
+    <dl class="faq-section">
+      <dt>What is Listy?</dt>
+      <dd>Listy is a marketplace platform offering real estate services at flat fees, tailored to your needs.</dd>
+
+      <dt>How does Listy save me money?</dt>
+      <dd>By allowing you to pick and pay for only the services you want, Listy avoids traditional high commission fees.</dd>
+
+      <dt>Is this service RESPA compliant?</dt>
+      <dd>Yes, we operate fully within RESPA guidelines — see the RESPA Compliance page for details.</dd>
+    </dl>
+  </section>
+
+  <!-- Buyers -->
+  <section id="buyers">
+    <h2>Buyers — Services & Fees</h2>
+    <div class="shape-circle shape3"></div>
+
+    <ul>
+      <li><strong>Home Showings:</strong> $25–$50 per showing</li>
+      <li><strong>Property Research & Reports:</strong> $100–$150 per report</li>
+      <li><strong>Offer Preparation Assistance:</strong> $150–$200</li>
+      <li><strong>Inspection Coordination:</strong> $150–$200</li>
+      <li><strong>Title Search & Closing Coordination:</strong> $200–$300</li>
+      <li><strong>Financing Consultation:</strong> $100–$150 per session</li>
+    </ul>
+
+    <p><strong>Average Buyer Cost with Listy:</strong> ~$500–$1,200 depending on services selected</p>
+
+    <h3>How It Works</h3>
+    <p>You pay for each service you need a la carte, or bundle several services into one package to save more.</p>
+
+    <h3>FAQ - Buyers</h3>
+    <dl class="faq-section">
+      <dt>Can I choose which agent to work with?</dt>
+      <dd>Yes! Check the Agents page to view bios and star ratings.</dd>
+      <dt>Are there any hidden fees?</dt>
+      <dd>No, every service and its price is transparent upfront.</dd>
+    </dl>
+  </section>
+
+  <!-- Sellers -->
+  <section id="sellers">
+    <h2>Sellers — Services & Fees</h2>
+    <div class="shape-circle shape4"></div>
+
+    <ul>
+      <li><strong>Free Basic Listing:</strong> $0</li>
+      <li><strong>Professional Photography:</strong> $150–$200</li>
+      <li><strong>Virtual Staging:</strong> $200–$300</li>
+      <li><strong>3D Tours & Floor Plans:</strong> $250–$400</li>
+      <li><strong>Enhanced Marketing:</strong> $150–$300</li>
+      <li><strong>Legal & Closing Assistance:</strong> $200–$300</li>
+    </ul>
+
+    <p><strong>Average Seller Cost with Listy:</strong> ~$1,200 (compared to $10,000+ traditional commissions)</p>
+
+    <h3>How It Works</h3>
+    <p>Start with a free basic listing, then add the marketing or closing help you want. You pay flat fees — no percentages or commissions.</p>
+
+    <h3>FAQ - Sellers</h3>
+    <dl class="faq-section">
+      <dt>Is the basic listing really free?</dt>
+      <dd>Yes, you can list your property at no cost.</dd>
+      <dt>Can I customize my marketing package?</dt>
+      <dd>Absolutely. Pick only the services that fit your needs.</dd>
+    </dl>
+  </section>
+
+  <!-- Vendors -->
+  <section id="vendors">
+    <h2>Vendors & Partners</h2>
+
+<p>Listy gives vendors premium exposure to active buyers and sellers. For a flat monthly marketing fee, your service appears on our platform — where clients can browse, compare, and hire you directly.</p>
+
+<h3>What Clients See:</h3>
+<div class="agent-list">
+
+  <div class="agent-card">
+    <img src="https://via.placeholder.com/400x200?text=Lens+Studio" alt="Lens Studio" class="agent-photo" />
+    <div class="agent-name">Lens Studio</div>
+    <div class="agent-bio">Professional real estate photography with 24-hour turnaround. Packages from $175.</div>
+    <div class="stars">⭐⭐⭐⭐⭐</div>
+  </div>
+
+  <div class="agent-card">
+    <img src="https://via.placeholder.com/400x200?text=SafeHome+Inspections" alt="SafeHome Inspections" class="agent-photo" />
+    <div class="agent-name">SafeHome Inspections</div>
+    <div class="agent-bio">Certified inspectors covering Indiana. Detailed digital reports, same-day delivery. Flat rate: $225.</div>
+    <div class="stars">⭐⭐⭐⭐☆</div>
+  </div>
+
+  <div class="agent-card">
+    <img src="https://via.placeholder.com/400x200?text=Secure+Title+Co." alt="Secure Title Co." class="agent-photo" />
+    <div class="agent-name">Secure Title Co.</div>
+    <div class="agent-bio">Full-service title and escrow coordination. Efficient, transparent, and affordable.</div>
+    <div class="stars">⭐⭐⭐⭐⭐</div>
+  </div>
+
+  <div class="agent-card">
+    <img src="https://via.placeholder.com/400x200?text=Modern+Mortgage+Team" alt="Modern Mortgage Team" class="agent-photo" />
+    <div class="agent-name">Modern Mortgage Team</div>
+    <div class="agent-bio">Indy’s trusted mortgage partner. Pre-approval in 24 hours. Rates as low as 5.9%.</div>
+    <div class="stars">⭐⭐⭐⭐</div>
+  </div>
+
+  <div class="agent-card">
+    <img src="https://via.placeholder.com/400x200?text=StageIt+Studio" alt="StageIt Studio" class="agent-photo" />
+    <div class="agent-name">StageIt Studio</div>
+    <div class="agent-bio">Virtual staging for empty homes. Affordable and realistic visuals from $120/room.</div>
+    <div class="stars">⭐⭐⭐⭐⭐</div>
+  </div>
+
+</div>
+
+<a href="https://forms.gle/your-google-form-link" class="btn" target="_blank" rel="noopener noreferrer">Become a Vendor</a>
+
+<h3>FAQ - Vendors</h3>
+<dl class="faq-section">
+  <dt>How will I appear on the site?</dt>
+  <dd>Clients will see your logo, service overview, pricing, and star ratings. You can also provide contact links.</dd>
+
+  <dt>How much does it cost?</dt>
+  <dd>Flat-rate exposure starts at $300/month. There are no per-lead or percentage fees.</dd>
+
+  <dt>Can I update my listing?</dt>
+  <dd>Yes, vendors can update services, pricing, and photos anytime through their profile manager (coming soon).</dd>
+</dl>
+</section>
+
+  <!-- Agents -->
+  <section id="agents">
+    <h2>Agents — Join Listy</h2>
+
+    <p>Listy agents work on a flat-fee compensation model — no percentage commissions.</p>
+    <p>Showcase your bio and photo, set your flat fees, and let clients pick you based on your profile and ratings.</p>
+
+    <div class="agent-list" id="agentList">
+      <!-- Example Agents -->
+      <div class="agent-card">
+        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Agent Jane" class="agent-photo" />
+        <div class="agent-name">Jane Doe</div>
+        <div class="agent-bio">Experienced Realtor specializing in residential sales. Flat fee: $1,500 per transaction.</div>
+        <div class="stars">⭐⭐⭐⭐⭐</div>
+      </div>
+      <div class="agent-card">
+        <img src="https://randomuser.me/api/portraits/men/33.jpg" alt="Agent John" class="agent-photo" />
+        <div class="agent-name">John Smith</div>
+        <div class="agent-bio">Focused on first-time buyers and sellers. Flat fee: $1,200 per transaction.</div>
+        <div class="stars">⭐⭐⭐⭐☆</div>
+      </div>
+    </div>
+
+    <a href="https://forms.gle/your-google-form-link" class="btn" target="_blank" rel="noopener noreferrer">Agent Signup</a>
+
+    <h3>FAQ - Agents</h3>
+    <dl class="faq-section">
+      <dt>How am I compensated?</dt>
+      <dd>Agents earn a flat fee per transaction—no commission percentages.</dd>
+      <dt>Can I showcase my photo and bio?</dt>
+      <dd>Yes, it helps clients select the right agent for them.</dd>
+    </dl>
+  </section>
+
+  <!-- RESPA Compliance -->
+  <section id="respa">
+    <h2>RESPA Compliance</h2>
+
+    <p>
+      Listy operates fully within the guidelines of the Real Estate Settlement Procedures Act (RESPA). Our flat fee model ensures transparency, no kickbacks, and clear disclosures for all parties involved.
+    </p>
+    <p>
+      We maintain strict compliance to protect consumers from unfair practices and to promote ethical real estate transactions.
+    </p>
+
+    <h3>FAQ - RESPA</h3>
+    <dl class="faq-section">
+      <dt>What is RESPA?</dt>
+      <dd>The Real Estate Settlement Procedures Act (RESPA) protects consumers by requiring disclosures about real estate settlement costs.</dd>
+      <dt>How does Listy comply with RESPA?</dt>
+      <dd>We only charge flat fees openly disclosed upfront. No referral fees or kickbacks occur.</dd>
+      <dt>Who enforces RESPA?</dt>
+      <dd>The Consumer Financial Protection Bureau (CFPB) enforces RESPA regulations.</dd>
+    </dl>
+  </section>
+</div>
+
+<script>
+  // Navigation: show sections on click
+  const links = document.querySelectorAll('nav a');
+  const sections = document.querySelectorAll('section');
+
+  links.forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const targetId = link.getAttribute('data-target');
+      sections.forEach(sec => {
+        sec.classList.toggle('active', sec.id === targetId);
+      });
+      // Scroll top for better UX
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+
+  // FAQ toggle
+  document.querySelectorAll('.faq-section dt').forEach(dt => {
+    dt.addEventListener('click', () => {
+      const dd = dt.nextElementSibling;
+      if (dd.style.display === 'block') {
+        dd.style.display = 'none';
+      } else {
+        dd.style.display = 'block';
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
